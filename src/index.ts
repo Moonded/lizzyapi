@@ -1,4 +1,4 @@
-import { apiToken, log } from "utils";
+import { log, getLatestRelease } from "utils";
 
 import express from "express";
 import Routes from "api";
@@ -50,3 +50,11 @@ httpServer.listen(8080, () => {
 httpsServer.listen(8443, () => {
   log("HTTPS API started and is running on port 8443");
 });
+
+// Update the latest release data on start
+await getLatestRelease(false);
+
+// Update the latest release data every 24 hours
+setInterval(async () => {
+  await getLatestRelease(false);
+}, 1000 * 60 * 60 * 24);
