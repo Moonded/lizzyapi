@@ -17,13 +17,13 @@ model User {
   id          String @id @default(cuid())
   user        String
   userid      String @unique
-  nexusmods   String 
-  github      String 
+  nexusmods   String
+  github      String
   theme       String @default("default")
-  description String 
-  style       String 
-  timezone    String 
-  country     String 
+  description String
+  style       String
+  timezone    String
+  country     String
 }
 
 model Suggestions {
@@ -50,9 +50,23 @@ model Quotes {
 }
 
 model Pass {
-  id       String @id @default(cuid())
-  username String @unique
+  id       String  @id @default(cuid())
+  username String  @unique
+  discord  String? @unique
   token    String
   salt     String
   jwt      String
+}
+
+model Github {
+  id               String   @id
+  red4ext          Json
+  archivexl        Json
+  tweakxl          Json
+  codeware         Json
+  cet              Json
+  redscript        Json
+  created          DateTime @default(now())
+  updated          DateTime @default(now())
+  lastupdatemanuel Boolean  @default(false)
 }
