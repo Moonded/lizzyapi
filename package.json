@@ -5,7 +5,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "node --no-warnings --import=tsx --env-file=.env --watch src/index.ts"
+    "dev": "prisma migrate deploy & node --no-warnings --import=tsx --env-file=.env --watch src/index.ts"
   },
   "author": "Sebastian 'Moonded' Danielzik",
   "license": "ISC",
