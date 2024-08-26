@@ -4,3 +4,4 @@ export * from "./prismaClient";
 export * from "./logging";
 export * from "./github";
 export * from "./client"
+export * from "./Updater";
