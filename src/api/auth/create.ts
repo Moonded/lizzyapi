@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
   const salt = crypto.randomBytes(16).toString("base64");
   const tokens = sha512(body.password + salt);
 
-  const token = jwt.sign(body, process.env.API_TOKEN);
+  const token = jwt.sign(body, process.env.API_TOKEN as string);
 
   const user = await prisma.pass.findUnique({
     where: {
