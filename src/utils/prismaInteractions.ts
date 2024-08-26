@@ -13,6 +13,9 @@ const upserUser = async (interaction: Interaction, info: any) => {
       github: info.GitHub,
       theme: info.Theme,
       description: info.Description,
+      timezone: info.Timezone,
+      country: info.Country,
+      style: "default", // Add the style property with a valid value
     },
     create: {
       userid: interaction.user.id,
@@ -21,6 +24,9 @@ const upserUser = async (interaction: Interaction, info: any) => {
       github: info.GitHub,
       theme: info.Theme,
       description: info.Description,
+      style: "default", // Add the style property with a valid value
+      timezone: info.Timezone,
+      country: info.Country,
     },
   });
 
