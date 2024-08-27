@@ -4,19 +4,23 @@ import { prisma } from "utils";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const data = req.body as {
-    question: string;
-    answer: string;
-  };
-
   try {
-    const newTrivia = await prisma.trivia.create({
-      data: {
-        question: data.question,
-        answer: data.answer,
-      },
-    });
-    return res.send(newTrivia);
+    const data = req.body as {
+      question: string;
+      answer: string;
+    };
+
+    try {
+      const newTrivia = await prisma.trivia.create({
+        data: {
+          question: data.question,
+          answer: data.answer,
+        },
+      });
+      return res.send(newTrivia);
+    } catch (e) {
+      return res.sendStatus(500);
+    }
   } catch (e) {
     return res.sendStatus(500);
   }

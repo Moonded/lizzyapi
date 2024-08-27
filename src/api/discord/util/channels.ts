@@ -3,17 +3,21 @@ import { log, client } from "utils";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  if (!req.query.server || typeof req.query.server !== "string") {
-    return res.status(400).send("Invalid query");
+  try {
+    if (!req.query.server || typeof req.query.server !== "string") {
+      return res.status(400).send("Invalid query");
+    }
+
+    const channels = await client.guilds.cache
+      .get(req.query.server)
+      ?.channels.fetch();
+
+    log("Roles sent");
+    return res.send(channels);
+  } catch (e) {
+    log(e);
+    return res.sendStatus(500);
   }
-
-  const channels = await client.guilds.cache
-    .get(req.query.server)
-    ?.channels.fetch();
-
-  res.send(channels);
-
-  log("Roles sent");
 });
 
 export default router;

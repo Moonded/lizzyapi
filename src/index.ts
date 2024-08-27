@@ -24,6 +24,7 @@ const credentials = { key: privateKey, cert: certificate };
 app.get("/", (rq, rs) => {
   rs.redirect("/api");
 });
+
 import swaggerUi from "swagger-ui-express";
 
 const swaggerDocument = yaml.parse(

@@ -79,33 +79,38 @@ const gauge_count_detail = new prm_client.Gauge({
 });
 
 router.post("/details", async (req, res) => {
-  if (!req.query.server || typeof req.query.server !== "string") {
-    return res.status(400).send("Invalid query");
-  }
-  gauge_time_detail.setToCurrentTime();
-  const end_detail = gauge_time_user.startTimer();
-  const UserArray = req.body as string[];
+  try {
+    if (!req.query.server || typeof req.query.server !== "string") {
+      return res.status(400).send("Invalid query");
+    }
+    gauge_time_detail.setToCurrentTime();
+    const end_detail = gauge_time_user.startTimer();
+    const UserArray = req.body as string[];
 
-  if (
-    !UserArray ||
-    !Array.isArray(UserArray) ||
-    UserArray.length === 0 ||
-    UserArray.some((user) => typeof user !== "string")
-  ) {
-    return res.status(400).send("Invalid query");
-  }
+    if (
+      !UserArray ||
+      !Array.isArray(UserArray) ||
+      UserArray.length === 0 ||
+      UserArray.some((user) => typeof user !== "string")
+    ) {
+      return res.status(400).send("Invalid query");
+    }
 
-  const Users = await prisma.user.findMany({
-    where: {
-      userid: {
-        in: UserArray,
+    const Users = await prisma.user.findMany({
+      where: {
+        userid: {
+          in: UserArray,
+        },
       },
-    },
-  });
+    });
 
-  res.send(Users);
-  end_detail();
-  gauge_count_detail.inc(1);
+    end_detail();
+    gauge_count_detail.inc(1);
+    return res.send(Users);
+  } catch (e) {
+    log(e);
+    return res.sendStatus(500);
+  }
 });
 
 export default router;

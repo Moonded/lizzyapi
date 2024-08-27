@@ -14,35 +14,39 @@ const gauge_count = new prm_client.Gauge({
 });
 
 router.get("/", (req, res) => {
-  if (!req.query.server || typeof req.query.server !== "string") {
-    return res.status(400).send("Invalid query");
+  try {
+    if (!req.query.server || typeof req.query.server !== "string") {
+      return res.status(400).send("Invalid query");
+    }
+    gauge_time.setToCurrentTime();
+    const end = gauge_time.startTimer();
+
+    const send = [
+      client.guilds.cache
+        .get(req.query.server.trim())
+        ?.roles.cache.map((role) => {
+          return {
+            Role: role.name,
+            Members: role.members.map((member) => {
+              return {
+                Username: member.user.username,
+                Discriminator: member.user.discriminator,
+                ID: member.user.id,
+                Bot: member.user.bot,
+              };
+            }),
+          };
+        }),
+    ];
+    end();
+    gauge_count.inc(1);
+
+    log("Roles sent");
+    return res.send(send);
+  } catch (e) {
+    log(e);
+    return res.sendStatus(500);
   }
-  gauge_time.setToCurrentTime();
-  const end = gauge_time.startTimer();
-
-  const send = [
-    client.guilds.cache
-      .get(req.query.server.trim())
-      ?.roles.cache.map((role) => {
-        return {
-          Role: role.name,
-          Members: role.members.map((member) => {
-            return {
-              Username: member.user.username,
-              Discriminator: member.user.discriminator,
-              ID: member.user.id,
-              Bot: member.user.bot,
-            };
-          }),
-        };
-      }),
-  ];
-
-  res.send(send);
-  end();
-  gauge_count.inc(1);
-
-  log("Roles sent");
 });
 
 export default router;

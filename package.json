@@ -5,7 +5,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "prisma migrate deploy & node --no-warnings --import=tsx --env-file=.env --watch src/index.ts --watch src/swaggerDocument.yml"
+    "dev": "prisma migrate deploy & node --no-warnings --import=tsx --env-file=.env --watch src/index.ts"
   },
   "author": "Sebastian 'Moonded' Danielzik",
   "license": "ISC",
