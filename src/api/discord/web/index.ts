@@ -49,7 +49,8 @@ router.get("/", async (req, res) => {
           CustomData: Users.find((a) => a.userid === member.user.id) || null,
         });
         return acc;
-      }
+      },
+      []
     );
 
     log("Experimental Roles sent");
