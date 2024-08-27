@@ -19,8 +19,4 @@ router.use("/bot", apiToken, bot);
 // router.use("/dev", apiToken, dev);
 // router.use("/auth", apiToken, auth);
 
-router.get("/", (req, res) => {
-  res.sendStatus(200);
-});
-
 export default router;

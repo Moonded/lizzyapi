@@ -10,7 +10,7 @@ import https from "https";
 import rateLimit from "express-rate-limit";
 
 import fs from "fs";
-
+import yaml from "yaml";
 import jwt from "jsonwebtoken";
 
 const admin = jwt.sign({ username: "admin" }, process.env.API_TOKEN as string);
@@ -21,9 +21,23 @@ const certificate = fs.readFileSync("./src/keys/fullchain.pem", "utf-8");
 
 const credentials = { key: privateKey, cert: certificate };
 
-app.get("/", (rq, rs) => {
-  rs.redirect("/api");
-});
+// app.get("/", (rq, rs) => {
+//   rs.redirect("/api");
+// });
+import swaggerUi from "swagger-ui-express";
+
+const swaggerDocument = yaml.parse(
+  fs.readFileSync("./src/swaggerDocument.yml", "utf-8")
+);
+
+
+const options = {
+  swaggerOptions: {
+    supportedSubmitMethods: []
+  },
+};
+
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 const windowMS = Number(process.env.API_RATE_WINDOW) * 1000 || 60 * 1000;
 const requests = Number(process.env.API_MAX_REQUESTS) || 10;
