@@ -21,9 +21,9 @@ const certificate = fs.readFileSync("./src/keys/fullchain.pem", "utf-8");
 
 const credentials = { key: privateKey, cert: certificate };
 
-// app.get("/", (rq, rs) => {
-//   rs.redirect("/api");
-// });
+app.get("/", (rq, rs) => {
+  rs.redirect("/api");
+});
 import swaggerUi from "swagger-ui-express";
 
 const swaggerDocument = yaml.parse(
@@ -37,7 +37,7 @@ const options = {
   },
 };
 
-app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+// app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 const windowMS = Number(process.env.API_RATE_WINDOW) * 1000 || 60 * 1000;
 const requests = Number(process.env.API_MAX_REQUESTS) || 10;
