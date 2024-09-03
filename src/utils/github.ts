@@ -2,19 +2,21 @@ import { App } from "octokit";
 import fs from "fs";
 
 const key = fs.readFileSync(
-  "./src/keys/lizzyfuzzy.2024-08-10.private-key.pem",
+  "./src/keys/red-modding-teams.2024-09-02.private-key.pem",
   "utf-8"
 );
 
 const app = new App({
-  appId: 966972,
+  appId: process.env.GITHUB_APP_ID!,
   privateKey: key,
   auth: {
-    id: 966972,
+    id: process.env.GITHUB_APP_ID!,
     privateKey: key,
-    installationId: 53666733,
+    installationId: process.env.GITHUB_INSTALLATION_ID!,
   },
-  installationId: 53666733,
+  installationId: process.env.GITHUB_INSTALLATION_ID!,
 });
 
-export const octokit = await app.getInstallationOctokit(53666733);
+export const octokit = await app.getInstallationOctokit(
+  Number(process.env.GITHUB_INSTALLATION_ID!)
+);
