@@ -2,7 +2,7 @@ import { App } from "octokit";
 import fs from "fs";
 
 const key = fs.readFileSync(
-  "./src/keys/red-modding-teams.2024-09-02.private-key.pem",
+  `./src/keys/${process.env.GITHUB_APP_KEY_FILE!}`,
   "utf-8"
 );
 
