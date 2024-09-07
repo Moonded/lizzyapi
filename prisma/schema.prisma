@@ -13,6 +13,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+// Deprecated
 model User {
   id          String @id @default(cuid())
   user        String
@@ -26,14 +28,15 @@ model User {
   country     String
 }
 
-model Suggestions {
-  id         String   @id @default(cuid())
-  user       String
-  userid     String
-  suggestion String
-  status     String   @default("pending")
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+
+// Deprecated
+model Pass {
+  id       String  @id @default(cuid())
+  username String  @unique
+  discord  String? @unique
+  token    String
+  salt     String
+  jwt      String
 }
 
 model Trivia {
@@ -46,16 +49,7 @@ model Trivia {
 model Quotes {
   id        String @id @default(cuid())
   quote     String
-  responder String
-}
-
-model Pass {
-  id       String  @id @default(cuid())
-  username String  @unique
-  discord  String? @unique
-  token    String
-  salt     String
-  jwt      String
+  responder String @default("everyone")
 }
 
 model Github {
@@ -69,4 +63,77 @@ model Github {
   created          DateTime @default(now())
   updated          DateTime @default(now())
   lastupdatemanuel Boolean  @default(false)
+}
+
+model UserV2 {
+  id           Int            @id @default(autoincrement())
+  username     String         @unique
+  keys         APIKeys[]
+  maxkeys      Int            @default(1)
+  connection   Connection[]
+  linkedroles  LinkedRoles[]
+  webinterface WebInterface[]
+}
+
+enum Service {
+  nexusmods
+  github
+  discord
+}
+
+model Connection {
+  id        Int     @id @default(autoincrement())
+  UserV2    UserV2? @relation(fields: [userv2id], references: [id])
+  userv2id  Int
+  service   Service @unique @default(discord)
+  username  String
+  serviceid String? @unique
+}
+
+model APIKeys {
+  id         Int     @id @default(autoincrement())
+  UserV2     UserV2? @relation(fields: [userv2id], references: [id])
+  userv2id   Int
+  key        String  @unique
+  name       String
+  permission BigInt
+}
+
+model Permissions {
+  id         Int    @id @default(autoincrement())
+  permission BigInt @unique
+  route      String
+  method     String
+}
+
+model LinkedRoles {
+  id       Int       @id @default(autoincrement())
+  UserV2   UserV2?   @relation(fields: [userv2id], references: [id])
+  userv2id Int
+  name     String
+  bool     Boolean?
+  num      Int?
+  date     DateTime?
+}
+
+model WebInterface {
+  id                Int     @id @default(autoincrement())
+  UserV2            UserV2? @relation(fields: [userv2id], references: [id])
+  userv2id          Int
+  theme             String  @default("default")
+  style             String  @default("default")
+  country           String?
+  nexusmods         String?
+  nexusmodsVerified Boolean @default(false)
+  github            String?
+  githubVerified    Boolean @default(false)
+  description       String?
+}
+
+model DiscordAuth {
+  id            Int    @id @default(autoincrement())
+  userid        String @unique
+  access_token  String
+  refresh_token String
+  expires_at    Int
 }

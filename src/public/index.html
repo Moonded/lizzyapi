@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Backend Auth</title>
+  </head>
+
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+
+  <body>
+    <a href="/api/v2/auth/discord" id="discordLogin">Login With Discord</a>
+    <a class="hidden" href="/api/v2/auth/nexusmods" id="nexusmodsLogin"
+      >Login With Nexusmods</a
+    >
+    <a class="hidden" href="/api/v2/auth/github" id="githubLogin"
+      >Login with Github</a
+    >
+    <p class="hidden" id="sucess">
+      You are logged in and connected all services. You can go back to discord
+      and close this window.
+    </p>
+  </body>
+
+  <script>
+    const query = window.location.search;
+
+    if (query.includes("error")) {
+      if (query.error === "notFound") {
+        alert("User not found, you first have to register with the bot.");
+      }
+      alert("An error occurred while trying to login");
+    }
+
+    const discordLogin = document.getElementById("discordLogin");
+    const nexusmodsLogin = document.getElementById("nexusmodsLogin");
+    const githubLogin = document.getElementById("githubLogin");
+    const sucess = document.getElementById("sucess");
+
+    const cookies = document.cookie.split(";");
+
+    cookies.forEach((cookie) => {
+      if (cookie.includes("discordUserData")) {
+        discordLogin.classList.toggle("hidden");
+        nexusmodsLogin.classList.toggle("hidden");
+        githubLogin.classList.toggle("hidden");
+      }
+
+      if (cookie.includes("nexusmodsUserData")) {
+        nexusmodsLogin.classList.toggle("hidden");
+      }
+
+      if (cookie.includes("githubUserData")) {
+        githubLogin.classList.toggle("hidden");
+      }
+
+      if (
+        cookie.includes("discordUserData") &&
+        cookie.includes("nexusmodsUserData") &&
+        cookie.includes("githubUserData")
+      ) {
+        sucess.classList.toggle("hidden");
+      }
+    });
+  </script>
+</html>

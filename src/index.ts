@@ -1,44 +1,17 @@
 import { log, getLatestRelease } from "utils";
-
 import express from "express";
-import Routes from "api";
-export const app = express();
-
+import api from "src/api";
 import http from "http";
 import https from "https";
-
 import rateLimit from "express-rate-limit";
-
 import fs from "fs";
-import yaml from "yaml";
-import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 
-const admin = jwt.sign({ username: "admin" }, process.env.API_TOKEN as string);
-log(admin);
-
+export const app = express();
 const privateKey = fs.readFileSync("./src/keys/privkey.pem", "utf-8");
 const certificate = fs.readFileSync("./src/keys/fullchain.pem", "utf-8");
 
 const credentials = { key: privateKey, cert: certificate };
-
-app.get("/", (rq, rs) => {
-  rs.redirect("/api");
-});
-
-import swaggerUi from "swagger-ui-express";
-
-const swaggerDocument = yaml.parse(
-  fs.readFileSync("./src/swaggerDocument.yml", "utf-8")
-);
-
-
-const options = {
-  swaggerOptions: {
-    supportedSubmitMethods: []
-  },
-};
-
-// app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 const windowMS = Number(process.env.API_RATE_WINDOW) * 1000 || 60 * 1000;
 const requests = Number(process.env.API_MAX_REQUESTS) || 10;
@@ -51,19 +24,19 @@ const limit = rateLimit({
 
 app.use(limit);
 app.use(express.json());
-
-// app.use(apiToken);
-app.use("/api", Routes);
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.disable("x-powered-by");
+app.use("/api", api);
 
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
 
 httpServer.listen(8080, () => {
-  log("HTTP API started and is running on port 8080");
+  log("Port 8080 Pupulated.");
 });
 
 httpsServer.listen(8443, () => {
-  log("HTTPS API started and is running on port 8443");
+  log("Port 8443 Pupulated.");
 });
 
 // Update the latest release data on start

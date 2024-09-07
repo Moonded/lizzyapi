@@ -1,8 +1,17 @@
-const time = new Date().toLocaleTimeString("en-US", {
+export function log(message: any, ...args: any[]) {
+  const time = new Date().toLocaleTimeString("en-US", {
     hour12: true,
     timeStyle: "medium",
   });
 
-export function log(message: any) {
-  console.log(`[${time}] `, message);
+  console.log(`[${time}] `, message, ...args);
+}
+
+export function error(message: any, ...args: any[]) {
+  const time = new Date().toLocaleTimeString("en-US", {
+    hour12: true,
+    timeStyle: "medium",
+  });
+
+  console.error(`[${time}] `, message, ...args);
 }
