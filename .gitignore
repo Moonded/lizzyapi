@@ -1,4 +1,3 @@
 node_modules
-src/keys/lizzyfuzzy.2024-08-10.private-key.pem
 .env
-src/keys/red-modding-teams.2024-09-02.private-key.pem
+src/keys/github/*
