@@ -1,4 +1,5 @@
-import { log, getLatestRelease } from "utils";
+import { checkENVS, log, Updater } from "utils";
+
 import express from "express";
 import api from "src/api";
 import http from "http";
@@ -8,6 +9,9 @@ import fs from "fs";
 import cookieParser from "cookie-parser";
 
 export const app = express();
+
+checkENVS();
+
 const privateKey = fs.readFileSync("./src/keys/privkey.pem", "utf-8");
 const certificate = fs.readFileSync("./src/keys/fullchain.pem", "utf-8");
 
@@ -40,9 +44,9 @@ httpsServer.listen(8443, () => {
 });
 
 // Update the latest release data on start
-await getLatestRelease(false);
+await Updater();
 
 // Update the latest release data every 24 hours
 setInterval(async () => {
-  await getLatestRelease(false);
+  await Updater();
 }, 1000 * 60 * 60 * 24);
