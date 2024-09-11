@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma, getLatestRelease } from "utils";
+import { prisma, Updater } from "utils";
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 
 router.get("/update", async (req, res) => {
   try {
-    const data = await getLatestRelease(true);
+    const data = await Updater();
     return res.send(data);
   } catch (e) {
     return res.sendStatus(500);
