@@ -2,7 +2,7 @@ import { App } from "octokit";
 import fs from "fs";
 
 const key = fs.readFileSync(
-  `./src/keys/${process.env.GITHUB_APP_KEY_FILE!}`,
+  `./src/keys/github/${process.env.GITHUB_APP_KEY_FILE!}`,
   "utf-8"
 );
 
