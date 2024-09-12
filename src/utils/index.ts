@@ -1,12 +1,9 @@
 export * from "./envCheck";
-export * from "./middleware ";
-export * from "./prismaClient";
+export * from "./middleware";
+export * from "./prisma";
 export * from "./logging";
-export * from "./github";
-export * from "./client";
-export * from "./gitupdater";
-export * from "./server";
-export * from "./bitfield";
+export * from "./hosting";
 export * from "./bigint";
-export * as discord from "./discord";
+export * from "./discord";
 export * from "./jwt";
+export * from "./github";

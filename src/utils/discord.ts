@@ -1,4 +1,5 @@
 import { log, prisma } from "utils";
+import { Client } from "discord.js";
 
 interface Tokens {
   access_token: string;
@@ -147,7 +148,7 @@ export async function getMetadata(userId: string, tokens: Tokens) {
 
 export async function updateMetadata(userId: string) {
   // Fetch the Discord tokens from storage
-  //   const tokens = await storage.getDiscordTokens(userId);
+  // const tokens = await storage.getDiscordTokens(userId);
 
   const tokens = await prisma.discordAuth.findUnique({
     where: {
@@ -178,22 +179,33 @@ export async function updateMetadata(userId: string) {
   } catch (e) {
     log(e);
   }
-
-  //   const metadata = {
-  //     linkedroles: userData,
-  //   };
-
-  //   //   let metadata = {};
-  //   //   try {
-  //   //     metadata = {
-  //   //       cookieseaten: 1483,
-  //   //       allergictonuts: 0, // 0 for false, 1 for true
-  //   //       firstcookiebaked: "2003-12-20",
-  //   //     };
-  //   //   } catch (e) {
-  //   //     log(e);
-  //   //   }
-
-  //   // Push the data to Discord.
-  //   await pushMetadata(userId, tokens, metadata);
 }
+
+export const client = new Client({
+  intents: [
+    "Guilds",
+    "GuildMembers",
+    "GuildBans",
+    "GuildEmojisAndStickers",
+    "GuildIntegrations",
+    "GuildWebhooks",
+    "GuildInvites",
+    "GuildVoiceStates",
+    "GuildPresences",
+    "GuildMessages",
+    "GuildMessageReactions",
+    "GuildMessageTyping",
+    "DirectMessages",
+    "DirectMessageReactions",
+    "DirectMessageTyping",
+    "MessageContent",
+    "GuildScheduledEvents",
+    "AutoModerationConfiguration",
+    "AutoModerationExecution",
+  ],
+});
+
+client.login(process.env.CLIENT_TOKEN).catch((err) => {
+  console.error("[Login Error]", err);
+  process.exit(1);
+});
