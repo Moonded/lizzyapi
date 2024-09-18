@@ -107,8 +107,10 @@ router.get("/", async (req, res) => {
         )?.webinterface || null;
     
       const NexusName = UserData?.find((a) => a.nexusmods)?.nexusmods;
-    
       const NexusData = NexusName ? await NexusModsQuery(NexusName!) : null;
+
+      const GithubName = UserData?.find((a) => a.github)?.github;
+      const GithubData = GithubName ? GithubName : null;
     
       const RoleData = member.roles.cache
         .map((role) => {
@@ -131,7 +133,7 @@ router.get("/", async (req, res) => {
         Roles: RoleData,
         CustomData: UserData,
         NexusData: NexusData,
-        GithubData: UserData?.find((a) => a.github),
+        GithubData: GithubData,
       });
       return acc;
     }, Promise.resolve([] as acc));
