@@ -108,7 +108,7 @@ router.get("/", async (req, res) => {
     
       const NexusName = UserData?.find((a) => a.nexusmods)?.nexusmods;
     
-      const NexusData = await NexusModsQuery(NexusName!);
+      const NexusData = NexusName ? await NexusModsQuery(NexusName!) : null;
     
       const RoleData = member.roles.cache
         .map((role) => {
