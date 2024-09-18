@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma, log, client } from "utils";
+import { prisma, log, client, NexusModsQuery } from "utils";
 const router = express.Router();
 
 type acc = {
@@ -18,6 +18,8 @@ type acc = {
     | null
     | undefined;
   CustomData: {}[] | null;
+  NexusData: {} | null;
+  GithubData: any;
 }[];
 
 router.get("/", async (req, res) => {
@@ -28,7 +30,10 @@ router.get("/", async (req, res) => {
     return res.status(400).send("Invalid query");
   }
 
-  if (typeof rolequery !== "string" || typeof JSON.parse(rolequery) !== "object") {
+  if (
+    typeof rolequery !== "string" ||
+    typeof JSON.parse(rolequery) !== "object"
+  ) {
     return res.status(400).send("Invalid query");
   }
 
@@ -91,16 +96,20 @@ router.get("/", async (req, res) => {
       },
     });
 
-    const data = MembersByRole.reduce((acc: acc, member) => {
+    const data = MembersByRole.reduce(async (acc: Promise<acc>, member) => {
       if (member.user.bot) return acc;
-
+    
       const UserData =
         Users.find(
           (a) =>
             a.connection[a.connection.findIndex((a) => a.service === "discord")]
               .serviceid === member.user.id || null
         )?.webinterface || null;
-
+    
+      const NexusName = UserData?.find((a) => a.nexusmods)?.nexusmods;
+    
+      const NexusData = await NexusModsQuery(NexusName!);
+    
       const RoleData = member.roles.cache
         .map((role) => {
           return {
@@ -112,8 +121,8 @@ router.get("/", async (req, res) => {
         })
         .filter((role) => role.Role !== "@everyone")
         .sort((a, b) => a.Position - b.Position);
-
-      acc.push({
+    
+      (await acc).push({
         Username: member.user.username,
         GlobalName: member.user.globalName,
         Image: member.user.displayAvatarURL(),
@@ -121,9 +130,11 @@ router.get("/", async (req, res) => {
         ID: member.user.id,
         Roles: RoleData,
         CustomData: UserData,
+        NexusData: NexusData,
+        GithubData: UserData?.find((a) => a.github),
       });
       return acc;
-    }, []);
+    }, Promise.resolve([] as acc));
 
     log("Experimental Roles sent");
     return res.send(data);
