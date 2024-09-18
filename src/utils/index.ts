@@ -7,3 +7,4 @@ export * from "./bigint";
 export * from "./discord";
 export * from "./jwt";
 export * from "./github";
+export * from "./nexusmods";

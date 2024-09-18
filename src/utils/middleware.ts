@@ -37,9 +37,11 @@ export async function apiTokenV2(req: Request, res: Response, next: any) {
     (r) => r.path === route && r.method.find((m) => m === method)
   );
 
+console.log(routePermission);
+
   if (!routePermission) {
     log(`Route not found / Open Route | Route ${route} | Method ${method}`);
-    return res.sendStatus(404);
+    return next();
   }
   // const routePermission = await prisma.permissions.findFirst({
   //   where: {
