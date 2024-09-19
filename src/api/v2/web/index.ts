@@ -1,5 +1,13 @@
 import express from "express";
-import { prisma, log, client, NexusModsQuery, GithubUserContributions } from "utils";
+import {
+  prisma,
+  log,
+  client,
+  NexusModsQuery,
+  GithubUserContributions,
+} from "utils";
+
+import type { GithubData, Repo } from "types";
 const router = express.Router();
 
 type acc = {
@@ -30,8 +38,6 @@ router.get("/", async (req, res) => {
     return res.status(400).send("Invalid Server query");
   }
 
-  console.log("RoleQ: ",rolequery);
-
   // if (
   //   typeof rolequery !== "string" ||
   //   typeof JSON.parse(rolequery) !== "object"
@@ -53,8 +59,6 @@ router.get("/", async (req, res) => {
           "790814286519468072", // Team-Wiki
           "1278051511087399114", // Dev Server Everyone
         ]);
-
-        console.log("Roles: ",RolesID)
 
     const Guild = await client.guilds.fetch(serverquery.trim());
 
@@ -102,20 +106,38 @@ router.get("/", async (req, res) => {
 
     const data = MembersByRole.reduce(async (acc: Promise<acc>, member) => {
       if (member.user.bot) return acc;
-    
+
       const UserData =
         Users.find(
           (a) =>
             a.connection[a.connection.findIndex((a) => a.service === "discord")]
               .serviceid === member.user.id || null
         )?.webinterface || null;
-    
+
       const NexusName = UserData?.find((a) => a.nexusmods)?.nexusmods;
       const NexusData = NexusName ? await NexusModsQuery(NexusName!) : null;
 
-      const GithubName = UserData?.find((a) => a.github)?.github;
-      const GithubData = GithubName ? await GithubUserContributions(GithubName!) : null;
-    
+      const GithubName = UserData?.find((a) => a.github)?.github!;
+      const Github = (await GithubUserContributions(
+        GithubName
+      )) as GithubData | null;
+
+      const GithubData = Github!.nodes.map((repo: Repo) => {
+        if (!repo) return null;
+
+        const RepoData = {
+          Repository: repo.nameWithOwner,
+          IssueCount: repo.issues.totalCount,
+          CommitCount: repo.defaultBranchRef
+            ? repo.defaultBranchRef.target.history.totalCount
+            : 0,
+        };
+
+        if (RepoData.IssueCount === 0 && RepoData.CommitCount === 0) return null;
+
+        return RepoData;
+      }).filter((a) => a !== null);
+
       const RoleData = member.roles.cache
         .map((role) => {
           return {
@@ -127,7 +149,7 @@ router.get("/", async (req, res) => {
         })
         .filter((role) => role.Role !== "@everyone")
         .sort((a, b) => a.Position - b.Position);
-    
+
       (await acc).push({
         Username: member.user.username,
         GlobalName: member.user.globalName,

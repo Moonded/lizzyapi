@@ -1,4 +1,4 @@
-interface GraphData {
+export interface GraphData {
   red4ext: {
     latestRelease: {
       tagName: string;
@@ -41,4 +41,22 @@ interface GraphData {
       url: string;
     };
   };
-};
+}
+
+export interface Repo {
+  nameWithOwner: string;
+  issues: {
+    totalCount: number;
+  };
+  defaultBranchRef: {
+    target: {
+      history: {
+        totalCount: number;
+      };
+    };
+  } | null;
+}
+
+export interface GithubData {
+  nodes: [Repo];
+}

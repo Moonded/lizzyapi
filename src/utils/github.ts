@@ -1,4 +1,5 @@
 import { prisma } from "utils";
+import type { GraphData, GithubData } from "types";
 import { App } from "octokit";
 import fs from "fs";
 
@@ -101,7 +102,10 @@ red4ext: repository(owner: "WopsS", name: "RED4ext") {
   return data;
 }
 
-export async function GithubUserContributions(author: string, repo: string = "wolvenkit") {
+export async function GithubUserContributions(
+  author: string,
+  repo: string = "wolvenkit"
+): Promise<GithubData | unknown> {
   try {
     const RedModdingRepos = await octokit.rest.repos.listForUser({
       username: repo,
@@ -116,7 +120,7 @@ export async function GithubUserContributions(author: string, repo: string = "wo
     });
 
     const GithubUserId = GithubUserByName.data.node_id;
-    const data = await octokit.graphql(
+    const data: GithubData = await octokit.graphql(
       `
       query ($repos: [ID!]!, $author: String!, $authorId: ID!) {
           nodes(ids: $repos) {
@@ -145,8 +149,23 @@ export async function GithubUserContributions(author: string, repo: string = "wo
       }
     );
 
+    // console.dir(RepoData.nodes, { depth: null });
+
+    // const data = Promise.all(
+    //   RepoData.nodes.map((repo: Repo) => {
+    //     return {
+    //       Repository: repo.nameWithOwner,
+    //       IssueCount: repo.issues.totalCount,
+    //       HistoryCount: repo.defaultBranchRef.target.history.totalCount,
+    //     };
+    //   })
+    // );
+
+    // console.log(await data);
+
     return data;
   } catch (error) {
+    console.error(error);
     return error;
   }
 }
