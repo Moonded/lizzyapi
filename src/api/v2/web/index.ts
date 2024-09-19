@@ -27,21 +27,23 @@ router.get("/", async (req, res) => {
   const rolequery = req.query.r;
 
   if (!serverquery || typeof serverquery !== "string") {
-    return res.status(400).send("Invalid query");
+    return res.status(400).send("Invalid Server query");
   }
 
-  if (
-    typeof rolequery !== "string" ||
-    typeof JSON.parse(rolequery) !== "object"
-  ) {
-    return res.status(400).send("Invalid query");
-  }
+  console.log("RoleQ: ",rolequery);
+
+  // if (
+  //   typeof rolequery !== "string" ||
+  //   typeof JSON.parse(rolequery) !== "object"
+  // ) {
+  //   return res.status(400).send("Invalid Role query");
+  // }
 
   try {
     let RolesID: string[] = [];
 
     rolequery
-      ? (RolesID = JSON.parse(rolequery))
+      ? (RolesID = JSON.parse(rolequery as string))
       : (RolesID = [
           "717719048514699264", // Moderator
           "811909247125159987", // Team-REDCore
@@ -51,6 +53,8 @@ router.get("/", async (req, res) => {
           "790814286519468072", // Team-Wiki
           "1278051511087399114", // Dev Server Everyone
         ]);
+
+        console.log("Roles: ",RolesID)
 
     const Guild = await client.guilds.fetch(serverquery.trim());
 
@@ -139,7 +143,7 @@ router.get("/", async (req, res) => {
     }, Promise.resolve([] as acc));
 
     log("Experimental Roles sent");
-    return res.send(data);
+    return res.send(await data);
   } catch (e) {
     log(e);
     return res.sendStatus(500);

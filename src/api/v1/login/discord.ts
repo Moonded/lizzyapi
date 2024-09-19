@@ -64,12 +64,12 @@ router.get("/redirect", async (req, res) => {
       }
     });
 
-    console.log(dev, normal);
+    // console.log(dev, normal);
 
     // guild.map((g: any) => g.id === "717692382849663036") ? true : false,
     //   guild.map((g: any) => g.id === "1278051511087399114") ? true : false
 
-    console.log(user);
+    // console.log(user);
     // return res.send(user);
 
     return res.redirect("/");

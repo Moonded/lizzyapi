@@ -88,7 +88,7 @@ router.post("/update", async (req, res) => {
       discord?: string;
     };
 
-    console.log(data);
+    // console.log(data);
 
     const user = await prisma.pass.findUnique({
       where: {

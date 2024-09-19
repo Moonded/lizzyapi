@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
   const permission = 0x800;
 
   // Permissions Check Example
-  console.log((Number(info) & permission) == permission);
+  // console.log((Number(info) & permission) == permission);
   return res.send(JSON.parse(JSON.stringify(users, bigintReplacer)));
 });
 

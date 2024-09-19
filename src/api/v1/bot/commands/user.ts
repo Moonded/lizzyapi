@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
       Country: string;
     };
 
-    console.log(data);
+    // console.log(data);
 
     const user = await prisma.user.upsert({
       where: {

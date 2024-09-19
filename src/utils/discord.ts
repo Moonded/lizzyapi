@@ -175,7 +175,7 @@ export async function updateMetadata(userId: string) {
       },
     });
 
-    console.log(userData);
+    // console.log(userData);
   } catch (e) {
     log(e);
   }

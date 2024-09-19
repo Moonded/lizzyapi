@@ -37,7 +37,7 @@ export async function apiTokenV2(req: Request, res: Response, next: any) {
     (r) => r.path === route && r.method.find((m) => m === method)
   );
 
-console.log(routePermission);
+// console.log(routePermission);
 
   if (!routePermission) {
     log(`Route not found / Open Route | Route ${route} | Method ${method}`);

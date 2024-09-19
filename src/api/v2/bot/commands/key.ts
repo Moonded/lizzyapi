@@ -1,6 +1,5 @@
-import { log } from "console";
 import express from "express";
-import { prisma, createKey, bigintReplacer } from "utils";
+import { prisma, createKey, bigintReplacer, log } from "utils";
 
 const router = express.Router();
 
