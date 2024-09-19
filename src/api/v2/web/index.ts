@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma, log, client, NexusModsQuery } from "utils";
+import { prisma, log, client, NexusModsQuery, GithubUserContributions } from "utils";
 const router = express.Router();
 
 type acc = {
@@ -110,7 +110,7 @@ router.get("/", async (req, res) => {
       const NexusData = NexusName ? await NexusModsQuery(NexusName!) : null;
 
       const GithubName = UserData?.find((a) => a.github)?.github;
-      const GithubData = GithubName ? GithubName : null;
+      const GithubData = GithubName ? await GithubUserContributions(GithubName!) : null;
     
       const RoleData = member.roles.cache
         .map((role) => {

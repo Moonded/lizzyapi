@@ -100,3 +100,53 @@ red4ext: repository(owner: "WopsS", name: "RED4ext") {
 
   return data;
 }
+
+export async function GithubUserContributions(author: string, repo: string = "wolvenkit") {
+  try {
+    const RedModdingRepos = await octokit.rest.repos.listForUser({
+      username: repo,
+    });
+
+    const RepoIds = RedModdingRepos.data.map((repo) => {
+      return repo.node_id;
+    });
+
+    const GithubUserByName = await octokit.rest.users.getByUsername({
+      username: author,
+    });
+
+    const GithubUserId = GithubUserByName.data.node_id;
+    const data = await octokit.graphql(
+      `
+      query ($repos: [ID!]!, $author: String!, $authorId: ID!) {
+          nodes(ids: $repos) {
+            ... on Repository {
+              nameWithOwner
+              issues(filterBy: { createdBy: $author }) {
+                totalCount
+              }
+              defaultBranchRef {
+                target {
+                  ... on Commit {
+                    history(author: { id: $authorId }) {
+                      totalCount
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+      {
+        author: author,
+        authorId: GithubUserId,
+        repos: RepoIds,
+      }
+    );
+
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
