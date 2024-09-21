@@ -6,7 +6,7 @@ function envCheck(env: string) {
   }
 }
 
-export function checkENVS() {
+export function checkENVS(extras: string[] = []) {
   const envs = [
     "API_TOKEN",
     "API_RATE_WINDOW",
@@ -22,6 +22,8 @@ export function checkENVS() {
     "GITHUB_REDIRECT_URI",
     "GITHUB_CLIENT_SECRET",
     "NODE_ENV",
+    "NEXUSMODS_URI",
+    ...extras
   ];
 
   envs.forEach((element) => {
@@ -29,4 +31,6 @@ export function checkENVS() {
       throw new Error(`Environment Variable: ${element} is not set.`);
     }
   });
+
+  return true;
 }
