@@ -24,8 +24,9 @@ export const octokit = await app.getInstallationOctokit(
 );
 
 export async function Updater() {
-  const GraphData: GraphData = await octokit.graphql(
-    `
+  try {
+    const GraphData: GraphData = await octokit.graphql(
+      `
     query {
 red4ext: repository(owner: "WopsS", name: "RED4ext") {
     latestRelease {
@@ -71,35 +72,40 @@ red4ext: repository(owner: "WopsS", name: "RED4ext") {
   }
 }
     `
-  );
+    );
 
-  const data = await prisma.github.upsert({
-    where: {
-      id: "1",
-    },
-    update: {
-      red4ext: GraphData.red4ext,
-      archivexl: GraphData.archivexl,
-      tweakxl: GraphData.tweakxl,
-      codeware: GraphData.codeware,
-      cet: GraphData.cet,
-      redscript: GraphData.redscript,
-      updated: new Date(),
-    },
-    create: {
-      id: "1",
-      red4ext: GraphData.red4ext,
-      archivexl: GraphData.archivexl,
-      tweakxl: GraphData.tweakxl,
-      codeware: GraphData.codeware,
-      cet: GraphData.cet,
-      redscript: GraphData.redscript,
-      created: new Date(),
-      updated: new Date(),
-    },
-  });
+    const data = await prisma.github.upsert({
+      where: {
+        id: "1",
+      },
+      update: {
+        red4ext: GraphData.red4ext,
+        archivexl: GraphData.archivexl,
+        tweakxl: GraphData.tweakxl,
+        codeware: GraphData.codeware,
+        cet: GraphData.cet,
+        redscript: GraphData.redscript,
+        updated: new Date(),
+      },
+      create: {
+        id: "1",
+        red4ext: GraphData.red4ext,
+        archivexl: GraphData.archivexl,
+        tweakxl: GraphData.tweakxl,
+        codeware: GraphData.codeware,
+        cet: GraphData.cet,
+        redscript: GraphData.redscript,
+        created: new Date(),
+        updated: new Date(),
+      },
+    });
 
-  return data;
+    if (data) return true;
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 }
 
 export async function GithubUserContributions(
@@ -148,20 +154,6 @@ export async function GithubUserContributions(
         repos: RepoIds,
       }
     );
-
-    // console.dir(RepoData.nodes, { depth: null });
-
-    // const data = Promise.all(
-    //   RepoData.nodes.map((repo: Repo) => {
-    //     return {
-    //       Repository: repo.nameWithOwner,
-    //       IssueCount: repo.issues.totalCount,
-    //       HistoryCount: repo.defaultBranchRef.target.history.totalCount,
-    //     };
-    //   })
-    // );
-
-    // console.log(await data);
 
     return data;
   } catch (error) {

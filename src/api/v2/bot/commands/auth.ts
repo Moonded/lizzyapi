@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma, error, createKey } from "utils";
+import { prisma, errorLog, createKey } from "utils";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
 
     return res.status(200).send("User already exists");
   } catch (e) {
-    error(e);
+    errorLog(e);
     return res.status(500).send("Internal server error");
   }
 });
