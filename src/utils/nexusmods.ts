@@ -1,3 +1,5 @@
+import {errorLog} from 'utils'
+
 export async function NexusQueryByName(name: string) {
   const User = await fetch(process.env.NEXUSMODS_URI!, {
     method: "POST",
@@ -30,6 +32,7 @@ export async function NexusQueryByName(name: string) {
 }
 
 export async function NexusModsByFilterUserId(userId: String) {
+  try {
   const User = await fetch(process.env.NEXUSMODS_URI!, {
     method: "POST",
     headers: {
@@ -70,6 +73,9 @@ export async function NexusModsByFilterUserId(userId: String) {
   const data = await User.json();
 
   return data;
+} catch (error) {
+  errorLog(error);
+}
 }
 
 export async function NexusModsByFilterAuthor(userId: string) {
