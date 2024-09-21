@@ -85,7 +85,7 @@ model Connection {
   id        Int     @id @default(autoincrement())
   UserV2    UserV2? @relation(fields: [userv2id], references: [id])
   userv2id  Int
-  service   Service @unique @default(discord)
+  service   Service @default(discord)
   username  String
   serviceid String? @unique
 }
