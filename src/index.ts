@@ -10,7 +10,9 @@ import cookieParser from "cookie-parser";
 
 export const app = express();
 
-checkENVS();
+checkENVS() === true ? log("All Environment Variables are set.") : log("Environment Variables are not set.");
+
+process.env.NODE_ENV === "development" ?  log("Development Mode.") : log("Production Mode.");
 
 const privateKey = fs.readFileSync("./src/keys/privkey.pem", "utf-8");
 const certificate = fs.readFileSync("./src/keys/fullchain.pem", "utf-8");
@@ -26,7 +28,7 @@ const limit = rateLimit({
   message: "You are being rate limited",
 });
 
-app.use(limit);
+if (process.env.NODE_ENV !== "development") app.use(limit);
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.disable("x-powered-by");
@@ -44,9 +46,9 @@ httpsServer.listen(8443, () => {
 });
 
 // Update the latest release data on start
-await Updater();
+await Updater() === true ? log(`Latest Release Data Updated.`) : log("Error Updating Github Data.");
 
 // Update the latest release data every 24 hours
 setInterval(async () => {
-  await Updater();
+  await Updater() === true ? log(`Latest Release Data Updated.}.`) : log("Error Updating Github Data.");
 }, 1000 * 60 * 60 * 24);

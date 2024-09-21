@@ -6,7 +6,7 @@ import bot from "./bot";
 import dev from "./dev";
 
 router.use("/web", web);
-router.use("/dev", dev);
+if (process.env.NODE_ENV === "development" ) router.use("/dev", dev)
 router.use("/bot", bot);
 router.get("/", (req, res) => {
   res.sendStatus(200);
