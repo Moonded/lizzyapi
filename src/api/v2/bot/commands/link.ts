@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma, createKey } from "utils";
+import { prisma, createKey, errorLog } from "utils";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -88,9 +88,10 @@ router.post("/", async (req, res) => {
       },
     });
 
-    res.send(UserUpdate);
+    return res.send(UserUpdate);
   } catch (error) {
-    console.log(error);
+    errorLog(error);
+    return res.sendStatus(500);
   }
 });
 

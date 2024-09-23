@@ -2,6 +2,7 @@ import express from "express";
 import {
   prisma,
   log,
+  errorLog,
   client,
   NexusModsQuery,
   GithubUserContributions,
@@ -38,12 +39,9 @@ router.get("/", async (req, res) => {
     return res.status(400).send("Invalid Server query");
   }
 
-  // if (
-  //   typeof rolequery !== "string" ||
-  //   typeof JSON.parse(rolequery) !== "object"
-  // ) {
-  //   return res.status(400).send("Invalid Role query");
-  // }
+  if (rolequery && typeof rolequery !== "string") {
+    return res.status(400).send("Invalid Role query");
+  }
 
   try {
     let RolesID: string[] = [];
@@ -117,26 +115,30 @@ router.get("/", async (req, res) => {
       const NexusName = UserData?.find((a) => a.nexusmods)?.nexusmods;
       const NexusData = NexusName ? await NexusModsQuery(NexusName!) : null;
 
-      const GithubName = UserData?.find((a) => a.github)?.github!;
       const Github = (await GithubUserContributions(
-        GithubName
+        UserData?.find((a) => a.github)?.github!.toLocaleLowerCase()!
       )) as GithubData | null;
 
-      const GithubData = Github!.nodes.map((repo: Repo) => {
-        if (!repo) return null;
+      const GithubData = Github
+        ? Github!.nodes
+            .map((repo: Repo) => {
+              if (!repo) return null;
 
-        const RepoData = {
-          Repository: repo.nameWithOwner,
-          IssueCount: repo.issues.totalCount,
-          CommitCount: repo.defaultBranchRef
-            ? repo.defaultBranchRef.target.history.totalCount
-            : 0,
-        };
+              const RepoData = {
+                Repository: repo.nameWithOwner,
+                IssueCount: repo.issues.totalCount,
+                CommitCount: repo.defaultBranchRef
+                  ? repo.defaultBranchRef.target.history.totalCount
+                  : 0,
+              };
 
-        if (RepoData.IssueCount === 0 && RepoData.CommitCount === 0) return null;
+              if (RepoData.IssueCount === 0 && RepoData.CommitCount === 0)
+                return null;
 
-        return RepoData;
-      }).filter((a) => a !== null);
+              return RepoData;
+            })
+            .filter((a) => a !== null)
+        : null;
 
       const RoleData = member.roles.cache
         .map((role) => {
@@ -167,7 +169,7 @@ router.get("/", async (req, res) => {
     log("Experimental Roles sent");
     return res.send(await data);
   } catch (e) {
-    log(e);
+    errorLog(e);
     return res.sendStatus(500);
   }
 });

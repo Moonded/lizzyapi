@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma } from "utils";
+import { errorLog, prisma } from "utils";
 
 const router = express.Router();
 
@@ -8,6 +8,7 @@ router.get("/", async (req, res) => {
     const data = await prisma.quotes.findMany();
     return res.send(data);
   } catch (e) {
+    errorLog(e);
     return res.sendStatus(500);
   }
 });

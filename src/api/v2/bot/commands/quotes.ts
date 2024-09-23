@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma } from "utils";
+import { errorLog, prisma } from "utils";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -10,6 +10,7 @@ router.get("/", async (req, res) => {
 
     return res.send(data);
   } catch (e) {
+    errorLog(e);
     return res.sendStatus(500);
   }
 });
@@ -35,6 +36,7 @@ router.post("/", async (req, res) => {
 
     return res.send(quote);
   } catch (e) {
+    errorLog(e);
     return res.sendStatus(500);
   }
 });
@@ -53,6 +55,7 @@ router.put("/", async (req, res) => {
 
     return res.send(quote);
   } catch (e) {
+    errorLog(e);
     return res.sendStatus(500);
   }
 });
@@ -75,6 +78,7 @@ router.patch("/", async (req, res) => {
 
     return res.send(quote);
   } catch (e) {
+    errorLog(e);
     return res.sendStatus(500);
   }
 });

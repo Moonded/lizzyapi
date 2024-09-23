@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma } from "utils";
+import { errorLog, prisma } from "utils";
 
 const router = express.Router();
 
@@ -19,9 +19,11 @@ router.post("/", async (req, res) => {
       });
       return res.send(newTrivia);
     } catch (e) {
+      errorLog(e);
       return res.sendStatus(500);
     }
   } catch (e) {
+    errorLog(e);
     return res.sendStatus(500);
   }
 });
@@ -34,6 +36,7 @@ router.get("/", async (req, res) => {
 
     return res.send(randomTrivia);
   } catch (e) {
+    errorLog(e);
     return res.sendStatus(500);
   }
 });

@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma, Updater } from "utils";
+import { prisma, Updater, errorLog } from "utils";
 
 const router = express.Router();
 
@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
     });
     return res.send(data);
   } catch (e) {
+    errorLog(e);
     return res.sendStatus(500);
   }
 });
@@ -21,6 +22,7 @@ router.get("/update", async (req, res) => {
     const data = await Updater();
     return res.send(data);
   } catch (e) {
+    errorLog(e);
     return res.sendStatus(500);
   }
 });
