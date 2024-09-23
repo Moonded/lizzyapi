@@ -112,6 +112,9 @@ export async function GithubUserContributions(
   author: string,
   repo: string = "wolvenkit"
 ): Promise<GithubData | unknown> {
+
+  if (!author) return null;
+  
   try {
     const RedModdingRepos = await octokit.rest.repos.listForUser({
       username: repo,
