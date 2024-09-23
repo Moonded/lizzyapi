@@ -114,8 +114,6 @@ router.post("/list", async (req, res) => {
       },
     });
 
-    log(User);
-
     if (!User) return res.sendStatus(500);
 
     return res.send(JSON.stringify(User.keys, bigintReplacer));
