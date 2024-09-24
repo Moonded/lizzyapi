@@ -5,29 +5,32 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "prisma migrate deploy & node --no-warnings --import=tsx --env-file=.env --watch src/index.ts"
+    "dev": "node --no-warnings --import=tsx --env-file=.env --watch src/index.ts",
+    "db": "prisma migrate deploy",
+    "start": "prisma migrate deploy & node --no-warnings --import=tsx --env-file=.env --watch src/index.ts"
   },
   "author": "Sebastian 'Moonded' Danielzik",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "5.18.0",
     "@types/swagger-ui-express": "^4.1.6",
-    "discord.js": "^14.15.3",
-    "express": "^4.19.2",
+    "bitfield": "^4.2.0",
+    "cookie-parser": "^1.4.6",
+    "discord.js": "^14.16.2",
+    "express": "^4.21.0",
     "express-rate-limit": "^7.4.0",
     "js-sha512": "^0.9.0",
     "jsonwebtoken": "^9.0.2",
     "octokit": "^4.0.2",
-    "prisma": "^5.18.0",
-    "prom-client": "^15.1.3",
+    "prisma": "^5.19.1",
     "swagger-ui-express": "^5.0.1",
-    "tsx": "^4.17.0",
-    "typescript": "^5.5.4",
-    "yaml": "^2.5.0"
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.7",
     "@types/express": "^4.17.21",
-    "@types/jsonwebtoken": "^9.0.6",
-    "@types/node": "^22.4.2"
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.5.5"
   }
 }

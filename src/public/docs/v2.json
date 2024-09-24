@@ -1,0 +1,125 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "RED Modding Tools Backend API",
+    "description": "API for the RED Modding Tools Backend",
+    "version": "2.0.0"
+  },
+  "host": "backend.redmodding.org",
+  "basePath": "/api/v2",
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/bot/commands/auth": {
+      "post": {
+        "summary": "Authenticate a user",
+        "description": "Authenticate a user via bot",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/bot/commands/core-versions": {
+      "get": {
+        "summary": "Get the core versions",
+        "description": "Get the core versions",
+        "responses": {
+          "200": {
+            "description": "Core Versions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "red4ext": {
+                        "type": "object"
+                      },
+                      "archivexl": {
+                        "type": "object"
+                      },
+                      "tweakxl": {
+                        "type": "object"
+                      },
+                      "codeware": {
+                        "type": "object"
+                      },
+                      "cet": {
+                        "type": "object"
+                      },
+                      "redscript": {
+                        "type": "object"
+                      },
+                      "created": {
+                        "type": "string"
+                      },
+                      "updated": {
+                        "type": "string"
+                      },
+                      "lastupdatemanuel": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "example": {
+                    "id": "1",
+                    "red4ext": {
+                      "version": "0.1.0",
+                      "url": "https://redmodding.org/red4ext/0.1.0.zip"
+                    },
+                    "archivexl": {
+                      "version": "0.1.0",
+                      "url": "https://redmodding.org/archivexl/0.1.0.zip"
+                    },
+                    "tweakxl": {
+                      "version": "0.1.0",
+                      "url": "https://redmodding.org/tweakxl/0.1.0.zip"
+                    },
+                    "codeware": {
+                      "version": "0.1.0",
+                      "url": "https://redmodding.org/codeware/0.1.0.zip"
+                    },
+                    "cet": {
+                      "version": "0.1.0",
+                      "url": "https://redmodding.org/cet/0.1.0.zip"
+                    },
+                    "redscript": {
+                      "version": "0.1.0",
+                      "url": "https://redmodding.org/redscript/0.1.0.zip"
+                    },
+                    "created": "2021-01-01T00:00:00Z",
+                    "updated": "2021-01-01T00:00:00Z",
+                    "lastupdatemanuel": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/commands/core-versions/update": {
+      "post": {
+        "summary": "Update the core versions",
+        "description": "Update the core versions"
+      }
+    }
+  }
+}

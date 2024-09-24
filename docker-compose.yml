@@ -4,6 +4,6 @@ services:
     environment:
       POSTGRES_DB: prod
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: fe0c836613916e4f97be69054a56798f
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"

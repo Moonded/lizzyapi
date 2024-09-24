@@ -1,0 +1,272 @@
+{
+  "status": "deprecated",
+  "version": "1.0.0",
+  "auth": {
+    "create": {
+      "GET": {
+        "description": "Create a new user, if not exists",
+        "parameters": {
+          "username": {
+            "type": "string",
+            "required": true
+          },
+          "password": {
+            "type": "string",
+            "required": true
+          }
+        }
+      }
+    },
+    "users": {
+      "GET": {
+        "description": "Get all users",
+        "parameters": null
+      }
+    }
+  },
+  "bot": {
+    "status": "active",
+    "commands": {
+      "core-versions": {
+        "GET": {
+          "description": "Get the latest version of the core plugins",
+          "parameters": null
+        },
+        "update": {
+          "GET": {
+            "description": "Update the core plugins versions",
+            "parameters": null
+          }
+        }
+      },
+      "quotes": {
+        "GET": {
+          "description": "Get all Quotes",
+          "parameters": null
+        },
+        "POST": {
+          "description": "Create a new Quote",
+          "parameters": {
+            "quote": {
+              "description": "The quote",
+              "type": "string",
+              "required": true
+            },
+            "responder": {
+              "description": "The one who can trigger the quote. If not set, everyone can trigger it",
+              "type": "string",
+              "required": true
+            }
+          }
+        },
+        "PUT": {
+          "description": "Create many Quotes",
+          "parameters": {
+            "quotes": {
+              "description": "The quotes",
+              "type": "array",
+              "required": true,
+              "items": {
+                "quote": {
+                  "description": "The quote",
+                  "type": "string",
+                  "required": true
+                },
+                "responder": {
+                  "description": "The one who can trigger the quote. If not set, everyone can trigger it",
+                  "type": "string",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "PATCH": {
+          "description": "Update a Quote",
+          "parameters": {
+            "id": {
+              "description": "The id of the Quote",
+              "type": "string",
+              "required": true
+            },
+            "quote": {
+              "description": "The quote",
+              "type": "string",
+              "required": true
+            },
+            "responder": {
+              "description": "The one who can trigger the quote. If not set, everyone can trigger it",
+              "type": "string",
+              "required": true
+            }
+          }
+        }
+      },
+      "trivia": {
+        "GET": {
+          "description": "Get a random Trivia",
+          "parameters": null,
+          "responses": {
+            "item": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "POST": {
+          "description": "Create a new Trivia",
+          "parameters": {
+            "question": {
+              "description": "The question",
+              "type": "string",
+              "required": true
+            },
+            "answer": {
+              "description": "The answer",
+              "type": "string",
+              "required": true
+            }
+          }
+        }
+      },
+      "user": {
+        "POST": {
+          "description": "Create a new user or update an existing one",
+          "parameters": {
+            "User": {
+              "description": "username",
+              "type": "string",
+              "required": true
+            },
+            "Id": {
+              "description": "id",
+              "type": "string",
+              "required": true
+            },
+            "NexusMods": {
+              "description": "NexusMods username",
+              "type": "string",
+              "required": true
+            },
+            "Github": {
+              "description": "Github username",
+              "type": "string",
+              "required": true
+            },
+            "Theme": {
+              "description": "Theme",
+              "type": "string",
+              "required": true
+            },
+            "Description": {
+              "description": "Description",
+              "type": "string",
+              "required": true
+            },
+            "Style": {
+              "description": "Style",
+              "type": "string",
+              "required": true
+            },
+            "Timezone": {
+              "description": "Timezone",
+              "type": "string",
+              "required": true
+            },
+            "Country": {
+              "description": "Country code",
+              "type": "string",
+              "required": true
+            }
+          }
+        }
+      }
+    },
+    "team": {
+      "pass": {
+        "create": {
+          "POST": {
+            "description": "Create a new User",
+            "parameters": {
+              "username": {
+                "description": "username",
+                "type": "string",
+                "required": true
+              },
+              "password": {
+                "description": "password",
+                "type": "string",
+                "required": true
+              },
+              "discord": {
+                "description": "discord id",
+                "type": "string",
+                "required": true
+              }
+            }
+          }
+        },
+        "key": {
+          "POST": {
+            "description": "Get the users key",
+            "parameters": {
+              "username": {
+                "description": "username",
+                "type": "string",
+                "required": false
+              },
+              "discord": {
+                "description": "discord id",
+                "type": "string",
+                "required": false
+              },
+              "password": {
+                "description": "password",
+                "type": "string",
+                "required": true
+              }
+            }
+          }
+        },
+        "update": {
+          "POST": {
+            "description": "Update the users key",
+            "parameters": {
+              "username": {
+                "description": "username",
+                "type": "string",
+                "required": true
+              },
+              "password": {
+                "description": "password",
+                "type": "string",
+                "required": true
+              },
+              "discord": {
+                "description": "discord id",
+                "type": "string",
+                "required": true
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "discord": {
+    "status": "active",
+    "web": {
+      "GET": {
+        "description": "get userdata",
+        "parameters": null
+      }
+    }
+  }
+}
