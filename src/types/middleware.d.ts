@@ -2,6 +2,6 @@ interface Decode {
   keyName: string;
   username: string;
   permission: bigint;
-  user: number;
+  user: string;
   iat: number;
 }
