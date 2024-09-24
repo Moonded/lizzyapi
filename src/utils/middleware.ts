@@ -65,7 +65,13 @@ export async function apiTokenV2(req: Request, res: Response, next: any) {
 
   const user = await prisma.userV2.findUnique({
     where: {
-      id: decode.user,
+      username: decode.username,
+      connection: {
+        some: {
+          service: "discord",
+          serviceid: decode.user,
+        },
+      }
     },
     include: {
       keys: true,
